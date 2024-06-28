@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
@@ -40,13 +42,17 @@ fun SeasonMusicScreen(context: Context, season: String) {
                         },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(
-                        painter = painterResource(
-                            id = context.resources.getIdentifier(image, "drawable", context.packageName)
-                        ),
-                        contentDescription = music,
-                        modifier = Modifier.size(150.dp)
-                    )
+                    val imageResId = context.resources.getIdentifier(image, "drawable", context.packageName)
+                    Log.d("ResourceID", "Grid Image resId: $imageResId for imageName: $image")
+                    if (imageResId != 0) {
+                        Image(
+                            painter = painterResource(id = imageResId),
+                            contentDescription = music,
+                            modifier = Modifier.size(150.dp)
+                        )
+                    } else {
+                        Text("Image not found", color = Color.Red)
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = music)
                 }
