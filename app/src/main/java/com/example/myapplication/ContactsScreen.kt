@@ -16,10 +16,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.util.*
-import kotlin.random.Random
 
 @Composable
 fun ContactsScreen(context: Context, seasonMonths: List<Int>, season: String) {
@@ -109,9 +106,14 @@ fun getTopContacts(context: Context, seasonMonths: List<Int>): List<Pair<String,
 
     val sortedContacts = contactsMap.entries.sortedByDescending { it.value }.take(3)
 
-    return sortedContacts.map { entry ->
-        val name = getContactName(context, entry.key) ?: entry.key
-        Pair(name, entry.value.toString())
+    return if (sortedContacts.isEmpty()) {
+        // 통화 기록이 없는 경우 무작위 연락처를 반환
+        getRandomContacts(context, 3)
+    } else {
+        sortedContacts.map { entry ->
+            val name = getContactName(context, entry.key) ?: entry.key
+            Pair(name, entry.value.toString())
+        }
     }
 }
 

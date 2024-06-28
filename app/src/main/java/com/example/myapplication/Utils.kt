@@ -50,42 +50,6 @@ val seasonMusic = mapOf(
     )
 )
 
-
-val seasonTexts = mapOf(
-    "봄" to listOf(
-        "봄 텍스트 1",
-        "봄 텍스트 2",
-        "봄 텍스트 3",
-        "봄 텍스트 4",
-        "봄 텍스트 5",
-        "봄 텍스트 6"
-    ),
-    "여름" to listOf(
-        "여름 텍스트 1",
-        "여름 텍스트 2",
-        "여름 텍스트 3",
-        "여름 텍스트 4",
-        "여름 텍스트 5",
-        "여름 텍스트 6"
-    ),
-    "가을" to listOf(
-        "가을 텍스트 1",
-        "가을 텍스트 2",
-        "가을 텍스트 3",
-        "가을 텍스트 4",
-        "가을 텍스트 5",
-        "가을 텍스트 6"
-    ),
-    "겨울" to listOf(
-        "겨울 텍스트 1",
-        "겨울 텍스트 2",
-        "겨울 텍스트 3",
-        "겨울 텍스트 4",
-        "겨울 텍스트 5",
-        "겨울 텍스트 6"
-    )
-)
-
 val songInfos = mapOf(
     "spring_music_1" to SongInfo("Spring Song 1", "Artist A", 2020),
     "spring_music_2" to SongInfo("Spring Song 2", "Artist B", 2021),
