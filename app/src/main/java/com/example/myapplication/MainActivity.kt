@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 // 권한이 부여되었을 때 필요한 작업 수행
             } else {
-                // 권한이 거부되었을 때 필요한 작업 수행
+                // 권한이 거부되었을 때 필요한 작업 수행해보려
             }
         }
     }
