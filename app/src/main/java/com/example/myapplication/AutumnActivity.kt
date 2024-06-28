@@ -21,6 +21,7 @@ class AutumnActivity : ComponentActivity() {
                 ) {
                     VerticalPagerExample(context = this@AutumnActivity, season = "가을")
                 }
+
             }
         }
     }
