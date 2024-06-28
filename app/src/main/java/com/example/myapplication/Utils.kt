@@ -10,8 +10,7 @@ import kotlin.random.Random
 
 data class SongInfo(
     val title: String,
-    val artist: String,
-    val year: Int
+    val artist: String
 )
 
 // 계절별 음악 리스트
@@ -51,16 +50,16 @@ val seasonMusic = mapOf(
 )
 
 val songInfos = mapOf(
-    "sprs1" to SongInfo("Spring Song 1", "Artist A", 2020),
-    "sprs2" to SongInfo("Spring Song 2", "Artist B", 2021),
-    "sprs3" to SongInfo("Spring Song 3", "Artist C", 2022),
-    "sprs_4" to SongInfo("Spring Song 4", "Artist D", 2023),
-    "sprs5" to SongInfo("Spring Song 5", "Artist E", 2024),
-    "sprs6" to SongInfo("Spring Song 6", "Artist F", 2025),
-    "summer_music_1" to SongInfo("Summer Song 1", "Artist G", 2020),
-    "summer_music_2" to SongInfo("Summer Song 2", "Artist G", 2020),
-    "summer_music_3" to SongInfo("Summer Song 3", "Artist G", 2020),
-    "summer_music_4" to SongInfo("Summer Song 4", "Artist G", 2020),
+    "sprs1" to SongInfo("Spring Song 1", "Artist A"),
+    "sprs2" to SongInfo("Spring Song 2", "Artist B"),
+    "sprs3" to SongInfo("Spring Song 3", "Artist C"),
+    "sprs_4" to SongInfo("Spring Song 4", "Artist D"),
+    "sprs5" to SongInfo("Spring Song 5", "Artist E"),
+    "sprs6" to SongInfo("Spring Song 6", "Artist F"),
+    "summer_music_1" to SongInfo("Summer Song 1", "Artist G"),
+    "summer_music_2" to SongInfo("Summer Song 2", "Artist G"),
+    "summer_music_3" to SongInfo("Summer Song 3", "Artist G"),
+    "summer_music_4" to SongInfo("Summer Song 4", "Artist G"),
     "summer_music_5" to SongInfo("Summer Song 5", "Artist G", 2020),
     "summer_music_6" to SongInfo("Summer Song 6", "Artist G", 2020),
     "ats1" to SongInfo("Autumn Song 1", "Artist H", 2020),

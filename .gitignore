@@ -1,0 +1,39 @@
+# Android/IntelliJ related
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Ignore Gradle files
+.gradle
+build/
+
+# Ignore Android Studio files
+.idea
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/assetWizardSettings.xml
+
+# Ignore generated files
+build/
+captures/
+
+# Ignore Kotlin/JS build cache
+.kotlin
+
+# Exclude certain folders
+/app/build/
