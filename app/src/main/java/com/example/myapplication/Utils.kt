@@ -13,6 +13,7 @@ data class SongInfo(
     val artist: String
 )
 
+
 // 계절별 음악 리스트
 val seasonMusic = mapOf(
     "봄" to listOf(
