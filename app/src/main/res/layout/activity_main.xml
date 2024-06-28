@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button_top_left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/center_line_vertical"
+        android:layout_below="@id/center_line_horizontal"
+        android:background="@drawable/spring" />
+
+    <Button
+        android:id="@+id/button_top_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/center_line_vertical"
+        android:layout_below="@id/center_line_horizontal"
+        android:background="@drawable/summer" />
+
+    <Button
+        android:id="@+id/button_bottom_left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/center_line_vertical"
+        android:layout_above="@id/center_line_horizontal"
+        android:background="@drawable/autumn" />
+
+    <Button
+        android:id="@+id/button_bottom_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/center_line_vertical"
+        android:layout_above="@id/center_line_horizontal"
+        android:background="@drawable/winter" />
+
+    <View
+        android:id="@+id/center_line_vertical"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:background="#000" />
+
+    <View
+        android:id="@+id/center_line_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_centerVertical="true"
+        android:background="#000" />
+</RelativeLayout>
