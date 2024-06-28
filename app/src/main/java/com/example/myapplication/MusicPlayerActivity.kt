@@ -81,7 +81,7 @@ fun MusicPlayerScreen(musicTitle: String, imageName: String, onPlayClick: () -> 
             .padding(16.dp)
     ) {
         Icon(
-            painter = painterResource(id = LocalContext.current.resources.getIdentifier("ic_close", "drawable", LocalContext.current.packageName)),
+            painter = painterResource(id = LocalContext.current.resources.getIdentifier("exit", "drawable", LocalContext.current.packageName)),
             contentDescription = "Close",
             tint = Color.Black,
             modifier = Modifier

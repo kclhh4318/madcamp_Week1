@@ -40,12 +40,12 @@ val seasonMusic = mapOf(
         Pair("ats6", "aut6")
     ),
     "겨울" to listOf(
-        Pair("winter_music_1", "win1"),
-        Pair("winter_music_2", "win2"),
-        Pair("winter_music_3", "win3"),
-        Pair("winter_music_4", "win4"),
-        Pair("winter_music_5", "win5"),
-        Pair("winter_music_6", "win6")
+        Pair("wts1", "win1"),
+        Pair("wts2", "win2"),
+        Pair("wts3", "win3"),
+        Pair("wts4", "win4"),
+        Pair("wts5", "win5"),
+        Pair("wts6", "win6")
     )
 )
 
@@ -56,24 +56,24 @@ val songInfos = mapOf(
     "sprs_4" to SongInfo("Spring Song 4", "Artist D"),
     "sprs5" to SongInfo("Spring Song 5", "Artist E"),
     "sprs6" to SongInfo("Spring Song 6", "Artist F"),
-    "summer_music_1" to SongInfo("Summer Song 1", "Artist G"),
-    "summer_music_2" to SongInfo("Summer Song 2", "Artist G"),
-    "summer_music_3" to SongInfo("Summer Song 3", "Artist G"),
-    "summer_music_4" to SongInfo("Summer Song 4", "Artist G"),
-    "summer_music_5" to SongInfo("Summer Song 5", "Artist G", 2020),
-    "summer_music_6" to SongInfo("Summer Song 6", "Artist G", 2020),
-    "ats1" to SongInfo("Autumn Song 1", "Artist H", 2020),
-    "ats2" to SongInfo("Autumn Song 2", "Artist H", 2020),
-    "ats3" to SongInfo("Autumn Song 3", "Artist H", 2020),
-    "ats4" to SongInfo("Autumn Song 4", "Artist H", 2020),
-    "ats5" to SongInfo("Autumn Song 5", "Artist H", 2020),
-    "autumn_music_6" to SongInfo("Autumn Song 6", "Artist H", 2020),
-    "winter_music_1" to SongInfo("Winter Song 1", "Artist I", 2020),
-    "winter_music_2" to SongInfo("Winter Song 2", "Artist I", 2020),
-    "winter_music_3" to SongInfo("Winter Song 3", "Artist I", 2020),
-    "winter_music_4" to SongInfo("Winter Song 4", "Artist I", 2020),
-    "winter_music_5" to SongInfo("Winter Song 5", "Artist I", 2020),
-    "winter_music_6" to SongInfo("Winter Song 6", "Artist I", 2020),
+    "sms1" to SongInfo("Summer Song 1", "Artist G"),
+    "sms2" to SongInfo("Summer Song 2", "Artist G"),
+    "sms3" to SongInfo("Summer Song 3", "Artist G"),
+    "sms4" to SongInfo("Summer Song 4", "Artist G"),
+    "sms5" to SongInfo("Summer Song 5", "Artist G"),
+    "sms6" to SongInfo("Summer Song 6", "Artist G"),
+    "ats1" to SongInfo("Autumn Song 1", "Artist H"),
+    "ats2" to SongInfo("Autumn Song 2", "Artist H"),
+    "ats3" to SongInfo("Autumn Song 3", "Artist H"),
+    "ats4" to SongInfo("Autumn Song 4", "Artist H"),
+    "ats5" to SongInfo("Autumn Song 5", "Artist H"),
+    "ats6" to SongInfo("Autumn Song 6", "Artist H"),
+    "wts1" to SongInfo("Winter Song 1", "Artist I"),
+    "wts2" to SongInfo("Winter Song 2", "Artist I"),
+    "wts3" to SongInfo("Winter Song 3", "Artist I"),
+    "wts4" to SongInfo("Winter Song 4", "Artist I"),
+    "wts5" to SongInfo("Winter Song 5", "Artist I"),
+    "wts6" to SongInfo("Winter Song 6", "Artist I"),
 )
 
 fun getRandomContacts(context: Context, count: Int): List<Pair<String, String>> {
