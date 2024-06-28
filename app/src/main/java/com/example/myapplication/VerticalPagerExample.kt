@@ -10,6 +10,9 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
+// ContactsScreen을 임포트합니다.
+import com.example.myapplication.ContactsScreen
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun VerticalPagerExample(context: Context, season: String) {

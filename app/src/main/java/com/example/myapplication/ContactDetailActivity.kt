@@ -26,8 +26,7 @@ class ContactDetailActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val texts = seasonTexts[season] ?: emptyList()
-                    val text = if (texts.isNotEmpty()) texts.random() else "No text available"
+                    val text = getRandomMessage(this@ContactDetailActivity, season)
 
                     Column(
                         modifier = Modifier

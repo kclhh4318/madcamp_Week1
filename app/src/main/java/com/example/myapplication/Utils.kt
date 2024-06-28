@@ -4,6 +4,9 @@ import android.content.Context
 import android.provider.CallLog
 import android.provider.ContactsContract
 import java.util.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import kotlin.random.Random
 
 data class SongInfo(
     val title: String,
@@ -110,68 +113,6 @@ val songInfos = mapOf(
     "winter_music_6" to SongInfo("Winter Song 6", "Artist I", 2020),
 )
 
-fun getTopContacts(context: Context, months: List<Int>): List<Pair<String, String>> {
-    val calendar = Calendar.getInstance()
-    val currentYear = calendar.get(Calendar.YEAR)
-    val lastYear = currentYear - 1
-
-    val fromDate = Calendar.getInstance().apply {
-        set(lastYear, months.first() - 1, 1, 0, 0)
-    }.timeInMillis
-
-    val toDate = Calendar.getInstance().apply {
-        if (months.first() == 12) {
-            set(currentYear, months.last() - 1, 28, 23, 59)
-        } else {
-            set(lastYear, months.last(), 1, 0, 0)
-        }
-    }.timeInMillis
-
-    val callLogs = mutableListOf<String>()
-    val callUri = CallLog.Calls.CONTENT_URI
-    val projection = arrayOf(CallLog.Calls.NUMBER)
-    val selection = "${CallLog.Calls.DATE} BETWEEN ? AND ?"
-    val selectionArgs = arrayOf(fromDate.toString(), toDate.toString())
-
-    val cursor = context.contentResolver.query(callUri, projection, selection, selectionArgs, null)
-    cursor?.use {
-        while (it.moveToNext()) {
-            val number = it.getString(it.getColumnIndexOrThrow(CallLog.Calls.NUMBER))
-            callLogs.add(number)
-        }
-    }
-
-    val callLogCount = callLogs.groupingBy { it }.eachCount().toList().sortedByDescending { it.second }.map { it.first }
-    val contacts = mutableListOf<Pair<String, String>>()
-
-    if (callLogCount.isNotEmpty()) {
-        callLogCount.take(3).forEach { number ->
-            val contactName = getContactName(context, number) ?: "Unknown"
-            contacts.add(contactName to number)
-        }
-    } else {
-        val randomContacts = getRandomContacts(context, 3)
-        contacts.addAll(randomContacts)
-    }
-
-    return contacts
-}
-
-fun getContactName(context: Context, phoneNumber: String): String? {
-    val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
-    val projection = arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
-    val selection = "${ContactsContract.CommonDataKinds.Phone.NUMBER} = ?"
-    val selectionArgs = arrayOf(phoneNumber)
-
-    val cursor = context.contentResolver.query(uri, projection, selection, selectionArgs, null)
-    cursor?.use {
-        if (it.moveToFirst()) {
-            return it.getString(it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-        }
-    }
-    return null
-}
-
 fun getRandomContacts(context: Context, count: Int): List<Pair<String, String>> {
     val contacts = mutableListOf<Pair<String, String>>()
     val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
@@ -186,4 +127,17 @@ fun getRandomContacts(context: Context, count: Int): List<Pair<String, String>> 
         }
     }
     return contacts
+}
+
+fun getRandomMessage(context: Context, season: String): String {
+    val textFiles = when (season) {
+        "봄" -> listOf("spp1.txt", "spp2.txt", "spp3.txt", "spp4.txt", "spp5.txt", "spp6.txt")
+        "여름" -> listOf("sup1.txt", "sup2.txt", "sup3.txt", "sup4.txt", "sup5.txt", "sup6.txt")
+        "가을" -> listOf("ap1.txt", "ap2.txt", "ap3.txt", "ap4.txt", "ap5.txt", "ap6.txt")
+        "겨울" -> listOf("wp1.txt", "wp2.txt", "wp3.txt", "wp4.txt", "wp5.txt", "wp6.txt", "wp7.txt")
+        else -> listOf()
+    }
+    val selectedFile = textFiles[Random.nextInt(textFiles.size)]
+    val inputStream = context.assets.open(selectedFile)
+    return BufferedReader(InputStreamReader(inputStream)).use { it.readText() }
 }
