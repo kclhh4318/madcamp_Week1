@@ -53,7 +53,7 @@ val songInfos = mapOf(
     "sprs1" to SongInfo("Spring Song 1", "Artist A"),
     "sprs2" to SongInfo("Spring Song 2", "Artist B"),
     "sprs3" to SongInfo("Spring Song 3", "Artist C"),
-    "sprs_4" to SongInfo("Spring Song 4", "Artist D"),
+    "sprs4" to SongInfo("Spring Song 4", "Artist D"),
     "sprs5" to SongInfo("Spring Song 5", "Artist E"),
     "sprs6" to SongInfo("Spring Song 6", "Artist F"),
     "sms1" to SongInfo("Summer Song 1", "Artist G"),
