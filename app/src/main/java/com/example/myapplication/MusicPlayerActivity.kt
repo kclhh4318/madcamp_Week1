@@ -1,6 +1,8 @@
 package com.example.myapplication
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -21,16 +23,49 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.clickable
 
 class MusicPlayerActivity : ComponentActivity() {
     private var mediaPlayer: MediaPlayer? = null
+    private val PERMISSION_REQUEST_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (!checkPermission()) {
+            requestPermission()
+        } else {
+            initPlayer()
+        }
+    }
+
+    private fun checkPermission(): Boolean {
+        val result = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.READ_EXTERNAL_STORAGE)
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                initPlayer()
+            } else {
+                // 권한 거부 시 처리
+                Log.e("MusicPlayerActivity", "Permission Denied")
+                finish() // 권한 거부 시 액티비티 종료
+            }
+        }
+    }
+
+    private fun initPlayer() {
         val musicTitle = intent.getStringExtra("musicTitle") ?: "No Music Selected"
         val imageName = intent.getStringExtra("imageName") ?: ""
 
@@ -43,13 +78,13 @@ class MusicPlayerActivity : ComponentActivity() {
                     MusicPlayerScreen(
                         musicTitle = musicTitle,
                         imageName = imageName,
-                        onPlayClick = { playMusic(musicTitle) },
                         onCloseClick = { finish() },
                         onShareClick = { shareMusic(musicTitle) }
                     )
                 }
             }
         }
+        playMusic(musicTitle) // 음악 재생
     }
 
     private fun playMusic(title: String) {
@@ -60,20 +95,22 @@ class MusicPlayerActivity : ComponentActivity() {
             Log.d("ResourceID", "Music resId: $resId for title: $title")
             if (resId != 0) {
                 Log.d("MusicPlayerActivity", "Creating MediaPlayer for resId: $resId")
-                mediaPlayer = MediaPlayer.create(this, resId)
-                mediaPlayer?.setOnCompletionListener {
-                    Log.d("MusicPlayerActivity", "Music completed")
-                    finish() // 음악 재생이 완료되면 Activity 종료
-                }
-                mediaPlayer?.setOnErrorListener { mp, what, extra ->
-                    Log.e("MusicPlayerActivity", "MediaPlayer error: what=$what, extra=$extra")
-                    true // true를 반환하여 에러 처리를 완료했음을 나타냅니다.
-                }
-                if (mediaPlayer != null) {
-                    Log.d("MusicPlayerActivity", "Starting MediaPlayer")
-                    mediaPlayer?.start()
-                } else {
-                    Log.e("MusicPlayerActivity", "MediaPlayer creation failed")
+                val uri = Uri.parse("android.resource://$packageName/$resId")
+                mediaPlayer = MediaPlayer().apply {
+                    setOnPreparedListener {
+                        Log.d("MusicPlayerActivity", "MediaPlayer prepared, starting playback")
+                        start()
+                    }
+                    setOnCompletionListener {
+                        Log.d("MusicPlayerActivity", "Music completed")
+                        finish() // 음악 재생이 완료되면 Activity 종료
+                    }
+                    setOnErrorListener { mp, what, extra ->
+                        Log.e("MusicPlayerActivity", "MediaPlayer error: what=$what, extra=$extra")
+                        true // true를 반환하여 에러 처리를 완료했음을 나타냅니다.
+                    }
+                    setDataSource(this@MusicPlayerActivity, uri)
+                    prepareAsync() // 비동기 준비
                 }
             } else {
                 // 리소스를 찾을 수 없을 때 처리
@@ -123,7 +160,6 @@ class MusicPlayerActivity : ComponentActivity() {
 fun MusicPlayerScreen(
     musicTitle: String,
     imageName: String,
-    onPlayClick: () -> Unit,
     onCloseClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
