@@ -8,8 +8,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,17 +18,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.rememberScrollState
-
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.clickable
 
 class MusicPlayerActivity : ComponentActivity() {
     private var mediaPlayer: MediaPlayer? = null
@@ -62,24 +55,45 @@ class MusicPlayerActivity : ComponentActivity() {
     private fun playMusic(title: String) {
         stopMusic() // 기존 재생 중인 음악이 있으면 중지
 
-        val resId = resources.getIdentifier(title.toLowerCase().replace(" ", "_"), "raw", packageName)
-        Log.d("ResourceID", "Music resId: $resId for title: $title")
-        if (resId != 0) {
-            mediaPlayer = MediaPlayer.create(this, resId)
-            mediaPlayer?.start()
-            mediaPlayer?.setOnCompletionListener {
-                finish() // 음악 재생이 완료되면 Activity 종료
+        try {
+            val resId = resources.getIdentifier(title.toLowerCase().replace(" ", "_"), "raw", packageName)
+            Log.d("ResourceID", "Music resId: $resId for title: $title")
+            if (resId != 0) {
+                Log.d("MusicPlayerActivity", "Creating MediaPlayer for resId: $resId")
+                mediaPlayer = MediaPlayer.create(this, resId)
+                mediaPlayer?.setOnCompletionListener {
+                    Log.d("MusicPlayerActivity", "Music completed")
+                    finish() // 음악 재생이 완료되면 Activity 종료
+                }
+                mediaPlayer?.setOnErrorListener { mp, what, extra ->
+                    Log.e("MusicPlayerActivity", "MediaPlayer error: what=$what, extra=$extra")
+                    true // true를 반환하여 에러 처리를 완료했음을 나타냅니다.
+                }
+                if (mediaPlayer != null) {
+                    Log.d("MusicPlayerActivity", "Starting MediaPlayer")
+                    mediaPlayer?.start()
+                } else {
+                    Log.e("MusicPlayerActivity", "MediaPlayer creation failed")
+                }
+            } else {
+                // 리소스를 찾을 수 없을 때 처리
+                Log.e("MusicPlayerActivity", "Resource not found for title: $title")
             }
-        } else {
-            // 리소스를 찾을 수 없을 때 처리
-            println("Resource not found for title: $title")
+        } catch (e: Exception) {
+            Log.e("MusicPlayerActivity", "Exception while creating MediaPlayer", e)
         }
     }
 
     private fun stopMusic() {
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
+        try {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+        } catch (e: IllegalStateException) {
+            Log.e("MusicPlayerActivity", "Error stopping MediaPlayer", e)
+        } finally {
+            mediaPlayer = null
+            Log.d("MusicPlayerActivity", "MediaPlayer stopped and released")
+        }
     }
 
     private fun shareMusic(title: String) {
@@ -115,9 +129,11 @@ fun MusicPlayerScreen(
 ) {
     val context = LocalContext.current
     var imageResId by remember { mutableStateOf(0) }
+    var songInfo by remember { mutableStateOf(SongInfo("Unknown Title", "Unknown Artist")) }
 
     LaunchedEffect(musicTitle) {
         imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
+        songInfo = songInfos[musicTitle] ?: SongInfo("Unknown Title", "Unknown Artist")
         Log.d("ResourceID", "Image resId: $imageResId for imageName: $imageName")
     }
 
@@ -126,17 +142,34 @@ fun MusicPlayerScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        if (imageResId != 0) {
-            Image(
-                painter = painterResource(id = imageResId),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(300.dp)
-                    .align(Alignment.Center)
-                    .clickable { onPlayClick() }
-            )
-        } else {
-            Text("Image not found", color = Color.Red, modifier = Modifier.align(Alignment.Center))
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(150.dp)) //앨범 위 여백
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    if (imageResId != 0) {
+                        Image(
+                            painter = painterResource(id = imageResId),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(300.dp)
+                        )
+                    } else {
+                        Text("Image not found", color = Color.Red)
+                    }
+                }
+                Spacer(modifier = Modifier.height(280.dp)) //앨범과 텍스트 사이 여백
+
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(text = "Title: ${songInfo.title}", style = MaterialTheme.typography.titleLarge)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(text = "Artist: ${songInfo.artist}", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+                Spacer(modifier = Modifier.height(270.dp)) //텍스트 하단 여백
+            }
         }
 
         IconButton(
@@ -164,4 +197,3 @@ fun MusicPlayerScreen(
         )
     }
 }
-
