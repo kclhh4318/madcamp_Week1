@@ -12,19 +12,22 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.core.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import com.example.myapplication.ui.theme.MyApplicationTheme
+import android.graphics.BitmapFactory
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
-import com.example.myapplication.ui.theme.MyApplicationTheme
-import android.graphics.BitmapFactory
-import androidx.core.content.ContextCompat
-import androidx.core.app.ActivityCompat
 
+val koPubMedium = FontFamily(Font(R.font.kopubmedium))
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +61,7 @@ class MainActivity : ComponentActivity() {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 // 권한이 부여되었을 때 필요한 작업 수행
             } else {
-                // 권한이 거부되었을 때 필요한 작업 수행해보려
+                // 권한이 거부되었을 때 필요한 작업 수행
             }
         }
     }
@@ -140,13 +143,15 @@ fun SeasonButton(iconRes: Int, text: String, onClick: () -> Unit, iconSize: Dp, 
             contentDescription = null,
             modifier = Modifier.size(iconSize)
         )
-        // Text(text = text, modifier = Modifier.padding(top = 8.dp))  // 이 부분을 제거
+        Text(
+            text = text,
+            modifier = Modifier.padding(top = 8.dp),
+            fontFamily = koPubMedium
+        )
     }
 }
 
-
 fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
-    // Raw height and width of image
     val height = options.outHeight
     val width = options.outWidth
     var inSampleSize = 1
@@ -155,8 +160,6 @@ fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeig
         val halfHeight = height / 2
         val halfWidth = width / 2
 
-        // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-        // height and width larger than the requested height and width.
         while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
             inSampleSize *= 2
         }

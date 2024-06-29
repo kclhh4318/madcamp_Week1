@@ -8,21 +8,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+
+        <!-- LoadingActivity를 시작 액티비티로 설정 -->
         <activity
-            android:name=".MainActivity"
+            android:name=".LoadingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
         <activity android:name=".SpringActivity" android:exported="true" />
         <activity android:name=".SummerActivity" android:exported="true" />
         <activity android:name=".AutumnActivity" android:exported="true" />
         <activity android:name=".WinterActivity" android:exported="true" />
         <activity android:name=".ContactDetailActivity" />
         <activity android:name=".MusicPlayerActivity" />
-
 
     </application>
 
