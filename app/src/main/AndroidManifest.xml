@@ -22,8 +22,6 @@
         <activity android:name=".WinterActivity" android:exported="true" />
         <activity android:name=".ContactDetailActivity" />
         <activity android:name=".MusicPlayerActivity" />
-
-
     </application>
 
     <uses-permission android:name="android.permission.READ_CALL_LOG" />

@@ -51,7 +51,6 @@ class MusicPlayerActivity : ComponentActivity() {
                         musicTitle = musicTitle,
                         imageName = imageName,
                         onPlayClick = { playMusic(musicTitle) },
-                        onStopClick = { stopMusic() },
                         onCloseClick = { finish() },
                         onShareClick = { shareMusic(musicTitle) }
                     )
@@ -107,16 +106,17 @@ class MusicPlayerActivity : ComponentActivity() {
 }
 
 @Composable
-fun MusicPlayerScreen(musicTitle: String, imageName: String, onPlayClick: () -> Unit, onStopClick: () -> Unit, onCloseClick: () -> Unit, onShareClick: () -> Unit) {
+fun MusicPlayerScreen(
+    musicTitle: String,
+    imageName: String,
+    onPlayClick: () -> Unit,
+    onCloseClick: () -> Unit,
+    onShareClick: () -> Unit
+) {
     val context = LocalContext.current
-    var showDetails by remember { mutableStateOf(false) }
-    var songInfo by remember { mutableStateOf(SongInfo("", "")) }
     var imageResId by remember { mutableStateOf(0) }
 
     LaunchedEffect(musicTitle) {
-        withContext(Dispatchers.IO) {
-            songInfo = songInfos[musicTitle] ?: SongInfo("Unknown Title", "Unknown Artist")
-        }
         imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
         Log.d("ResourceID", "Image resId: $imageResId for imageName: $imageName")
     }
@@ -125,63 +125,31 @@ fun MusicPlayerScreen(musicTitle: String, imageName: String, onPlayClick: () -> 
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .pointerInput(Unit) {
-                detectVerticalDragGestures { _, dragAmount ->
-                    if (dragAmount < -50) {
-                        showDetails = true
-                    } else if (dragAmount > 50) {
-                        showDetails = false
-                    }
-                }
-            }
     ) {
-        if (showDetails) {
-            Column(
+        if (imageResId != 0) {
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = null,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(modifier = Modifier.height(56.dp))
-                if (imageResId != 0) {
-                    Image(
-                        painter = painterResource(id = imageResId),
-                        contentDescription = null,
-                        modifier = Modifier.size(200.dp)
-                    )
-                } else {
-                    Text("Image not found", color = Color.Red)
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Artist: ${songInfo.artist}", fontSize = 16.sp)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Title: ${songInfo.title}", fontSize = 16.sp)
-            }
+                    .size(300.dp)
+                    .align(Alignment.Center)
+                    .clickable { onPlayClick() }
+            )
         } else {
-            if (imageResId != 0) {
-                Image(
-                    painter = painterResource(id = imageResId),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(300.dp)
-                        .align(Alignment.Center)
-                        .clickable { onPlayClick() }
-                )
-            } else {
-                Text("Image not found", color = Color.Red, modifier = Modifier.align(Alignment.Center))
-            }
+            Text("Image not found", color = Color.Red, modifier = Modifier.align(Alignment.Center))
         }
 
         IconButton(
             onClick = { onShareClick() },
             modifier = Modifier
-                .size(24.dp)
+                .size(48.dp)
                 .align(Alignment.BottomEnd)
-                .padding(16.dp)
         ) {
             Icon(
                 painter = painterResource(id = context.resources.getIdentifier("share", "drawable", context.packageName)),
                 contentDescription = "Share",
-                tint = Color.Black
+                tint = Color.Black,
+                modifier = Modifier.size(24.dp)
             )
         }
 
@@ -196,3 +164,4 @@ fun MusicPlayerScreen(musicTitle: String, imageName: String, onPlayClick: () -> 
         )
     }
 }
+

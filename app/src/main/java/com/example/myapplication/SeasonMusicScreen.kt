@@ -47,14 +47,14 @@ fun SeasonMusicScreen(context: Context, season: String) {
                     if (imageResId != 0) {
                         Image(
                             painter = painterResource(id = imageResId),
-                            contentDescription = music,
-                            modifier = Modifier.size(150.dp)
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(150.dp)
+                                .padding(8.dp) // 간격 추가
                         )
                     } else {
                         Text("Image not found", color = Color.Red)
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = music)
                 }
             }
         }
