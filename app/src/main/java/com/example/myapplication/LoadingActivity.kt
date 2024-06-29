@@ -2,23 +2,26 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import kotlinx.coroutines.delay
 
 val koPubBatangMedium = FontFamily(Font(R.font.kopubmedium))
 
@@ -31,30 +34,45 @@ class LoadingActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoadingScreen()
+                    LoadingScreen {
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    }
                 }
             }
         }
-
-        // 일정 시간 후에 메인 액티비티로 전환
-        Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }, 3000) // 3초
     }
 }
 
 @Composable
-fun LoadingScreen() {
+fun LoadingScreen(onAnimationEnd: () -> Unit) {
+    val alpha = remember { Animatable(0f) }
+
+    LaunchedEffect(Unit) {
+        alpha.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 500)
+        )
+        delay(1000)
+        alpha.animateTo(
+            targetValue = 0f,
+            animationSpec = tween(durationMillis = 500)
+        )
+        onAnimationEnd()
+    }
+
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .alpha(alpha.value),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = "사계",
             fontSize = 36.sp,
             color = Color.Black,
-            fontFamily = koPubBatangMedium
+            fontFamily = koPubBatangMedium,
+            modifier = Modifier
         )
     }
 }
